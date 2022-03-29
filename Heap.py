@@ -66,7 +66,7 @@ class Min_Heap():
 
     def make_heap(self):
         #Checks if the heap is legitimate, by visiting each node and swapping
-        #appropriately. 
+        #appropriately. Run in __init__ only.
 
         max_index = len(self.nodes) - 1
 
@@ -90,6 +90,44 @@ class Min_Heap():
             else:
                 to_visit = to_visit[1:]
 
+    def pop(self):
+        #Swaps element at the extreme and root and then makes fixes as it 
+        #goes along, by always swapping with the smallest value possible.
+
+        true_value = self.nodes[0]
+        extreme_value = self.nodes[-1]
+        self.nodes[0] = extreme_value
+        self.nodes = self.nodes[:-1]
+
+        extreme_index = 0
+        children_indices = self.child_indices(extreme_index)
+        stop = False #When no swaps made, can stop earlier.
+
+        while len(children_indices) > 1 and stop == False:
+
+            stop = True
+            left_index, right_index = children_indices
+            left, right = self.nodes[left_index], self.nodes[right_index]
+
+            if left < right:
+                if left < extreme_value:
+                    self.swap(left_index, extreme_index)
+                    extreme_index = left_index
+                    stop = False
+            else:
+                if right < extreme_value:
+                    self.swap(right_index, extreme_index)
+                    extreme_index = right_index
+                    stop = False
+
+            children_indices = self.child_indices(extreme_index)
+
+        if len(children_indices) == 1:
+            if extreme_value > self.nodes[children_indices[0]]:
+                self.swap(extreme_index, children_indices[0])
+
+        return true_value
+
 if __name__ == "__main__":
     #I should just write unit tests - automation is nice...
     #Actually definitely - Ive written 13 tests abd adding more and checking
@@ -108,7 +146,7 @@ if __name__ == "__main__":
     print("d:", d.nodes) #No - passed.
 
     e = Min_Heap([15, 2, 6, 1]) #Final config: [1, 2, 15, 6]
-    print("e:", e.nodes) #Failed. Left 
+    print("e:", e.nodes) #Passed
 
     f = Min_Heap([15, 2, 6, 1, 20]) #Final config: [1, 2, 15, 6, 20]
     print("f:", f.nodes) #Passed
@@ -147,4 +185,4 @@ if __name__ == "__main__":
 
     n = Min_Heap([1,2,5,3,6,8,10,4,7,9])
     n.insert(0) #Expected [0,1,5,3,2,8,10,4,7,9,6]
-    print("n:", n.nodes) #Failed.
+    print("n:", n.nodes) #Passed.
