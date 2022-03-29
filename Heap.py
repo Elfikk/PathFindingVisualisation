@@ -22,6 +22,7 @@ class Min_Heap():
         return parent_index
 
     def child_indices(self, parent_index):
+        #Returns indices of a node's children, if they exist.
         max_index = len(self.nodes) - 1
         left = 2 * parent_index + 1
         if left > max_index:
@@ -40,7 +41,7 @@ class Min_Heap():
         self.nodes[parent_index] = child
 
     def swap_up(self, child_index):
-        #Swaps child with parent.
+        #Swaps child with parent given the childs index.
         parent_index = parent_index(child_index)
         self.swap(child_index, parent_index)
 
@@ -53,14 +54,15 @@ class Min_Heap():
 
         legitimate = False
 
-        while not legitimate:
+        while not legitimate and value_index > 0:
 
             parent_index = self.parent_index(value_index)
 
-            if self.nodes[value_index] >= parent_index:
+            if self.nodes[value_index] >= self.nodes[parent_index]:
                 legitimate = True
             else:
                 self.swap(value_index, parent_index)
+                value_index = parent_index
 
     def make_heap(self):
         #Checks if the heap is legitimate, by visiting each node and swapping
@@ -89,6 +91,9 @@ class Min_Heap():
                 to_visit = to_visit[1:]
 
 if __name__ == "__main__":
+    #I should just write unit tests - automation is nice...
+    #Actually definitely - Ive written 13 tests abd adding more and checking
+    #I havent broken more stuff in the process is too much for me.
 
     a = Min_Heap() #Initiliases with no input.
     print("a:", a.nodes)
@@ -102,7 +107,7 @@ if __name__ == "__main__":
     d = Min_Heap([1,2]) #What about for 2 elements.
     print("d:", d.nodes) #No - passed.
 
-    e = Min_Heap([15, 2, 6, 1]) #Final config: [1, 2, 6, 15]
+    e = Min_Heap([15, 2, 6, 1]) #Final config: [1, 2, 15, 6]
     print("e:", e.nodes) #Failed. Left 
 
     f = Min_Heap([15, 2, 6, 1, 20]) #Final config: [1, 2, 15, 6, 20]
@@ -126,3 +131,20 @@ if __name__ == "__main__":
     #this is down to biases to left and right edges, as following my algo
     #on paper gives the output - the bias shouldnt matter at the end of 
     #the day, thats arbitrary.
+
+    k = Min_Heap([1,2,3]) #Does insert work? 
+    print("k1:", k.nodes) #Expect [1,2,3] - Passed
+    k.insert(4) 
+    print("k2:", k.nodes) #Expect[1,2,3,4] - Passed
+
+    l = Min_Heap([]) #Does insert work for empty heaps?
+    l.insert(1)
+    print("l:", l.nodes) #Expected [1] - Passed
+
+    m = Min_Heap([1,2,3]) #Minimum moving up from second level.
+    m.insert(0)
+    print("m:", m.nodes) #Expected [0, 1, 3, 2] - Passed
+
+    n = Min_Heap([1,2,5,3,6,8,10,4,7,9])
+    n.insert(0) #Expected [0,1,5,3,2,8,10,4,7,9,6]
+    print("n:", n.nodes) #Failed.
