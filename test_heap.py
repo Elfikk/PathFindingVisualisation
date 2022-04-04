@@ -68,13 +68,13 @@ class HeapTest(unittest.TestCase):
     def test_pop_simple(self):
         heap = Min_Heap([0,1,2,5,4])
         head = heap.pop()
-        self.assertEqual(head, 0)
+        self.assertEqual(head, (0,None))
         self.assertEqual(heap.nodes, [1,4,2,5])
 
     def test_pop_case2(self):
         heap = Min_Heap([1,2,3,4,5,6,7,8,9,10])
         root = heap.pop()
-        self.assertEqual(root, 1)
+        self.assertEqual(root, (1,None))
         self.assertEqual(heap.nodes, [2,4,3,8,5,6,7,10,9])
 
     def test_pop_empty(self):
@@ -85,15 +85,32 @@ class HeapTest(unittest.TestCase):
     def test_pop_one_node(self):
         heap = Min_Heap([0])
         head = heap.pop()
-        self.assertEqual(head, 0)
+        self.assertEqual(head, (0,None))
 
     def test_insert_then_pop(self):
         heap = Min_Heap([0, 2])
         heap.insert(-1)
         self.assertEqual(heap.nodes, [-1, 2, 0]) #-1 and 0 should be swapped
         root = heap.pop()
-        self.assertEqual(root, -1)
+        self.assertEqual(root, (-1,None))
         self.assertEqual(heap.nodes, [0,2])
+
+    def test_heapify_with_data(self):
+        j = Min_Heap([10,9,8,7,6,5,4,3,2,1], [10,9,8,7,6,5,4,3,2,1])
+        self.assertEqual(j.data, [1,2,5,3,6,8,10,4,7,9])
+
+    def test_insert_with_data(self):
+        j = Min_Heap([10,9,8,7,6,5,4,3,2,1], [10,9,8,7,6,5,4,3,2,1])
+        j.insert(0, 0)
+        self.assertEqual(j.nodes, [0,1,5,3,2,8,10,4,7,9,6])
+        self.assertEqual(j.data, [0,1,5,3,2,8,10,4,7,9,6])
+
+    def test_pop_with_data(self):
+        j = Min_Heap([0,1,5,3,2,8,10,4,7,9,6], ["a",1,5,3,2,8,10,4,7,9,6])
+        priority, data = j.pop()
+        self.assertEqual(j.nodes, [1,2,5,3,6,8,10,4,7,9])
+        self.assertEqual(priority, 0)
+        self.assertEqual(data, "a")
 
 if __name__ == "__main__":
     unittest.main()

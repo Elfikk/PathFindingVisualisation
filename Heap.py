@@ -6,8 +6,15 @@
 
 class Min_Heap():
 
-    def __init__(self, nodes = []):
+    def __init__(self, nodes = [], data = None):
         self.nodes = nodes
+
+        #No passed data possible - backwards compability.
+        if data == None:
+            self.data = [None for x in range(len(nodes))]
+        else:
+            self.data = data
+            
         if len(self.nodes):
             self.make_heap()
 
@@ -37,19 +44,25 @@ class Min_Heap():
         #Completely symmetrical so can pass child or parent indices 
         #either way around.
         child = self.nodes[child_index]
+        child_data = self.data[child_index]
+
         self.nodes[child_index] = self.nodes[parent_index]
+        self.data[child_index] = self.data[parent_index]
+
         self.nodes[parent_index] = child
+        self.data[parent_index] = child_data
 
     def swap_up(self, child_index):
         #Swaps child with parent given the childs index.
         parent_index = parent_index(child_index)
         self.swap(child_index, parent_index)
 
-    def insert(self, value):
+    def insert(self, value, data = None):
         #Inserts a new value to the min heap. Checks if the new value is 
         #smaller than its parent and swaps if so, repeating the check until
         #it has risen appropriately.
         self.nodes.append(value)
+        self.data.append(data)
         value_index = len(self.nodes) - 1
 
         legitimate = False
@@ -95,9 +108,14 @@ class Min_Heap():
         #goes along, by always swapping with the smallest value possible.
 
         true_value = self.nodes[0]
+        true_data = self.data[0]
+
         extreme_value = self.nodes[-1]
-        self.nodes[0] = extreme_value
+
+        self.swap(0, -1)
+
         self.nodes = self.nodes[:-1]
+        self.data = self.data[:-1]
 
         extreme_index = 0
         children_indices = self.child_indices(extreme_index)
@@ -126,7 +144,10 @@ class Min_Heap():
             if extreme_value > self.nodes[children_indices[0]]:
                 self.swap(extreme_index, children_indices[0])
 
-        return true_value
+        return true_value, true_data
+
+    def __len__(self):
+        return len(self.nodes)
 
 if __name__ == "__main__":
     #I should just write unit tests - automation is nice...
