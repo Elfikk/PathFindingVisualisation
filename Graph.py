@@ -2,12 +2,20 @@ from math import inf
 
 class Graph():
 
+    #General Graph with adjacency matrix approach.
+
     def __init__(self):
+
+        #map_to_row and map_to_id are dictionaries where the key is the node
+        #id and the row in the adjacency matrix respectively, to allow for
+        #access to nodes directly.
+
         self.map_to_row = {}
         self.map_to_id = {}
         self.adj_matrix = []
 
     def add_node(self, id):
+        #adds a node with specified id with no edges.
         dimension = len(self.adj_matrix)
         self.map_to_row[id] = dimension
         self.map_to_id[dimension] = id
@@ -22,18 +30,18 @@ class Graph():
         #non-bidirectional case.
         try:
             i, j = self.map_to_row[id1], self.map_to_row[id2]
-            self.adj_matrix[i][j] = weight
         except KeyError:
             raise KeyError("Referenced node is not in the graph.")
+        self.adj_matrix[i][j] = weight
 
     def bi_edge_edit(self, id1, id2, weight):
         #Change the weight of the edge between node with id1 and node with 
         #id2.
         try:
             i, j = self.map_to_row[id1], self.map_to_row[id2]
-            self.adj_matrix[i][j] = weight; self.adj_matrix[j][i] = weight
         except KeyError:
             raise KeyError("Referenced node is not in the graph.")
+        self.adj_matrix[i][j] = weight; self.adj_matrix[j][i] = weight
 
     def edge_remove(self, id1, id2):
         #To avoid unecessary imports in other files.
@@ -54,7 +62,8 @@ class Graph():
         return self.adj_matrix[i][j]
 
     def generate_adjacency_dic(self):
-        adj_dic = {self.map_to_id[x]: self.neighbours(self.map_to_id[x]) for x in range(len(self.adj_matrix))}
+        adj_dic = {self.map_to_id[x]: self.neighbours(self.map_to_id[x]) \
+                   for x in range(len(self.adj_matrix))}
         return adj_dic
         
     def nodes(self):
@@ -63,6 +72,10 @@ class Graph():
 def initialise_grid_graph(rows, columns, diag_cost = 2**0.5):
 
     g = Graph()
+
+    # g.map_to_row = {(x,y): x + y*columns for x in range(columns) for y in \
+    #                 range(rows)}
+    # g.map_to_id = {row: pos for pos, row in g.map_to_row.items()}
 
     g.add_node((0,0))
 
@@ -73,8 +86,6 @@ def initialise_grid_graph(rows, columns, diag_cost = 2**0.5):
     for x in range(1, columns):
         g.add_node((x, 0))
         g.bi_edge_edit((x-1,0), (x, 0), 1)
-
-    # print(g.nodes())
 
     for y in range(1, rows):
         for x in range(1, columns):
@@ -89,7 +100,23 @@ def initialise_grid_graph(rows, columns, diag_cost = 2**0.5):
     for x in range(1, columns):
         g.bi_edge_edit((x,0), (x-1,1), diag_cost)
 
+    # for y in range(rows):
+    #     for x in range(columns):
+    #         g.add_node((x,y))
+    
+    # for y in range(rows):
+    #     for x in range(columns):
+    #         pass
+    
     return g
+
+# def grid_weight(x0,y0,x,y, diag = 2**0.5):
+#     dist = (x - x0)**2 + (y - y0)**2
+#     if dist > 2:
+#         return inf
+#     elif dist > 1:
+#         return diag
+#     return 1
 
 if __name__ == "__main__":
 
