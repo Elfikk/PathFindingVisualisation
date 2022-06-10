@@ -149,6 +149,76 @@ class Min_Heap():
     def __len__(self):
         return len(self.nodes)
 
+    def remove_by_data(self, data, data_index = None):
+
+        subset = self.data
+        if data_index != None:
+            subset = [x[data_index] for x in self.data]
+
+        index = None
+        length = len(subset)
+        i = 0
+        while i < length and index == None:
+            if subset[i] == data:
+                index = i
+            i += 1
+
+        if index == None:
+            raise IndexError("No data.") 
+
+        extreme_value = self.nodes[-1]
+
+        self.swap(index, -1)
+
+        self.data = self.data[:-1]
+        self.nodes = self.nodes[:-1]
+
+        # print(index)
+
+        extreme_index = index
+        children_indices = self.child_indices(extreme_index)
+
+        # print(children_indices)
+
+        stop = False #When no swaps made, can stop earlier.
+
+        # print(self.nodes)
+        # print(self.data)
+
+        while len(children_indices) > 1 and stop == False:
+
+            stop = True
+            left_index, right_index = children_indices
+            left, right = self.nodes[left_index], self.nodes[right_index]
+
+            if left < right:
+                if left < extreme_value:
+                    # print(1)
+                    self.swap(left_index, extreme_index)
+                    extreme_index = left_index
+                    stop = False
+            else:
+                if right < extreme_value:
+                    # print(2)
+                    self.swap(right_index, extreme_index)
+                    extreme_index = right_index
+                    stop = False
+
+            children_indices = self.child_indices(extreme_index)
+
+            # print(self.nodes)
+            # print(self.data)
+
+
+        if len(children_indices) == 1:
+            # print(3)
+            if extreme_value > self.nodes[children_indices[0]]:
+                self.swap(extreme_index, children_indices[0])
+    
+        # print(self.nodes)
+        # print(self.data)        
+
+
 if __name__ == "__main__":
     #I should just write unit tests - automation is nice...
     #Actually definitely - Ive written 13 tests abd adding more and checking
@@ -207,3 +277,8 @@ if __name__ == "__main__":
     n = Min_Heap([1,2,5,3,6,8,10,4,7,9])
     n.insert(0) #Expected [0,1,5,3,2,8,10,4,7,9,6]
     print("n:", n.nodes) #Passed.
+
+    # o = Min_Heap([0,1,2,3,4,5], data = ["a", "b", "c", "d", "e", "f"])
+    # print(o.nodes, o.data)
+    # o.remove_by_data("a")
+    # print("Post-op:", o.nodes, o.data)

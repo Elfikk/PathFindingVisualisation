@@ -112,5 +112,43 @@ class HeapTest(unittest.TestCase):
         self.assertEqual(priority, 0)
         self.assertEqual(data, "a")
 
+    def test_remove_by_data_last_item(self):
+        #Removing last item, no swaps.
+        nodes = [0,1,5,3,2,8,10,4,7,9,6]
+        j = Min_Heap(nodes, data = nodes[::-1])
+        j.remove_by_data(0) 
+        self.assertEqual(j.nodes, [0,1,5,3,2,8,10,4,7,9])
+        self.assertEqual(j.data, [1,5,3,2,8,10,4,7,9,6][::-1])
+
+    def test_remove_by_data_root(self):
+        #Removing the root should act like popping.
+        nodes = [0, 1, 2, 3, 4, 5]
+        data = ["a", "b", "c", "d", "e", "f"]
+        k = Min_Heap(nodes, data)
+        k2 = Min_Heap(nodes.copy(), data.copy())
+        k.pop()
+        k2.remove_by_data("a")
+        self.assertEqual(k.data, k2.data)
+        self.assertEqual(k.nodes, k2.nodes)
+
+    def test_remove_by_data_mid_tree(self):
+        #Removing an item inside the heaps binary tree.
+        nodes = [0, 1, 2, 3, 4, 5]
+        data = ["a", "b", "c", "d", "e", "f"]
+        l = Min_Heap(nodes, data)
+        l.remove_by_data("b")
+        self.assertEqual(l.data, ["a", "d", "c", "f", "e"])
+        self.assertEqual(l.nodes, [0,3,2,5,4])
+
+    def test_remove_by_data_with_index(self):
+        #Removing an item from the tree, specifying the data in the 0th index
+        #of the data of the heap.
+        nodes = [0, 1, 2, 3, 4, 5]
+        data = [("a", 0), ("b", 1), ("c",2), ("d",3), ("e",4), ("f",5)]
+        l = Min_Heap(nodes, data)
+        l.remove_by_data("b", 0)
+        self.assertEqual(l.data, [('a', 0), ('d', 3), ('c', 2), ('f', 5), ('e', 4)])
+        self.assertEqual(l.nodes, [0,3,2,5,4])
+
 if __name__ == "__main__":
     unittest.main()

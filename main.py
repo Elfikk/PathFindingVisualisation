@@ -1,9 +1,8 @@
 import pygame 
-from Grid import Tile, generate_grid, draw_grid
+from Grid import generate_grid, draw_grid
 from Graph import initialise_grid_graph
 from Interface import Intermediate
 from a_star_algo import a_star_setup, visit_next_node, mark_neighbour
-from Heap import Min_Heap
 
 #pygame setup
 pygame.init()
@@ -118,13 +117,16 @@ while not done:
                 window_update(screen, clock, background_colour, grid_colour, \
                               columns, rows, x_min, y_min, interval)
 
-            path = [target]
-            prev = target
-            while prev != start:
-                prev = closed_set[prev][0]
-                adapter.change_status(prev, "on_path")
-                window_update(screen, clock, background_colour, grid_colour, \
-                              columns, rows, x_min, y_min, interval)
+            if neighbours == None:
+                path = [target]
+                prev = target
+                while prev != start:
+                    prev = closed_set[prev][0]
+                    adapter.change_status(prev, "on_path")
+                    window_update(screen, clock, background_colour, grid_colour, \
+                                columns, rows, x_min, y_min, interval)
+
+            print("No possible path.")
 
     window_update(screen, clock, background_colour, grid_colour, \
                               columns, rows, x_min, y_min, interval)

@@ -38,7 +38,10 @@ def a_star_path(graph, target, start = (0,0)):
                 if neighbour_pos in g:
                     neighbour_prev_cost = g[neighbour_pos] + h[neighbour_pos]
                     if neighbour_prev_cost > neighbour_g:
-                        pass
+                        #Need to get rid of the node of the neighbour in the open set and replace it with a new one.
+                        open_set.remove_by_data(neighbour_pos, 0)
+                        neighbour_cost = neighbour_g + h[neighbour_pos]
+                        open_set.insert(neighbour_cost, (neighbour_pos, pos))
                 else:
                     neighbour_cost = neighbour_g + h[neighbour_pos]
                     open_set.insert(neighbour_cost, (neighbour_pos, pos))
@@ -99,7 +102,9 @@ def mark_neighbour(graph, open_set, closed_set, h, g, adapter, pos, neighbour_po
         if neighbour_pos in g:
             neighbour_prev_cost = g[neighbour_pos] + h[neighbour_pos]
             if neighbour_prev_cost > neighbour_g:
-                pass
+                open_set.remove_by_data(neighbour_pos, 0)
+                neighbour_cost = neighbour_g + h[neighbour_pos]
+                open_set.insert(neighbour_cost, (neighbour_pos, pos))
         else:
             neighbour_cost = neighbour_g + h[neighbour_pos]
             open_set.insert(neighbour_cost, (neighbour_pos, pos))
