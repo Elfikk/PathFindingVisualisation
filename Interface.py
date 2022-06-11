@@ -29,31 +29,34 @@ class Intermediate():
     def change_status(self, node_id, code_word):
         #Used for changing the Tile colour in simple cases - can be used in 
         #the A* algorithm and in main.
+        tile = self.grid[node_id]
+        if tile.get_colour() == Intermediate.colours["obstacle"]:
+            self.obstacle(node_id)
         self.grid[node_id].set_colour(Intermediate.colours[code_word])
 
     def obstacle(self, node_id):
         #Special case of change_status - adding/removing obstacles is not purely 
-        #visual, as it requires changing the 
+        #visual, as it requires changing the accessible edges too.
 
         tile = self.grid[node_id]
         if tile.get_colour() == Intermediate.colours["unvisited"]:
             neighbours = self.graph.neighbours(node_id)
             for neighbour in neighbours:
                 self.graph.edge_remove(node_id, neighbour)
-            self.change_status(node_id, "obstacle")
+            self.grid[node_id].set_colour(Intermediate.colours["obstacle"])
         else:
             #Generates all legitimate neighbours to the tile in question and 
             #finds their Cartesian distances.
             neighbours = {(x, y): cartesian_distance(x, y, node_id[0], node_id[1]) \
                           for x in range(node_id[0]-1, node_id[0] + 2) \
-                          for y in range(node_id[0]-1 , node_id[0] + 2) \
+                          for y in range(node_id[1]-1 , node_id[1] + 2) \
                           if -1 < x < self.columns and -1 < y < self.rows}
             for neighbour in neighbours:
                 neighbour_colour = self.grid[neighbour].get_colour()
                 if neighbour_colour == Intermediate.colours["unvisited"]:
                     self.graph.bi_edge_edit(node_id, neighbour, \
                         neighbours[neighbour])
-            self.change_status(node_id, "unvisited")
+            self.grid[node_id].set_colour(Intermediate.colours["unvisited"])
 
     def pos_to_id(self, pos):
         #Hash-like function. Maps position from grid to a legitimate ID.

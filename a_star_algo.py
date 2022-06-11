@@ -93,20 +93,19 @@ def mark_neighbour(graph, open_set, closed_set, h, g, adapter, pos, neighbour_po
     current_g = g[pos]
 
     neighbour_g = current_g + graph.edge(pos, neighbour_pos)
+    neighbour_cost = neighbour_g + h[neighbour_pos]
 
     if neighbour_pos in closed_set:
         neighbour_prev_cost = closed_set[neighbour_pos][1]
-        if neighbour_prev_cost > neighbour_g:
-            closed_set[neighbour_pos] = [pos, neighbour_g]
+        if neighbour_prev_cost > neighbour_cost:
+            closed_set[neighbour_pos] = [pos, neighbour_cost]
     else:
         if neighbour_pos in g:
             neighbour_prev_cost = g[neighbour_pos] + h[neighbour_pos]
-            if neighbour_prev_cost > neighbour_g:
+            if neighbour_prev_cost > neighbour_cost:
                 open_set.remove_by_data(neighbour_pos, 0)
-                neighbour_cost = neighbour_g + h[neighbour_pos]
                 open_set.insert(neighbour_cost, (neighbour_pos, pos))
         else:
-            neighbour_cost = neighbour_g + h[neighbour_pos]
             open_set.insert(neighbour_cost, (neighbour_pos, pos))
             g[neighbour_pos] = current_g + graph.edge(pos, neighbour_pos)
 
@@ -136,6 +135,6 @@ if __name__ == "__main__":
     # g.edge_remove((1,1), (2,2))
     # g.edge_remove((2,1), (2,2))
 
-    print(a_star_path(g, (40, 99), (90, 23)))
+    print(a_star_path(g, (40, 49), (20, 23)))
 
    

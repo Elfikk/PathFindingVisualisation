@@ -95,10 +95,11 @@ def initialise_grid_graph(rows, columns, diag_cost = 2**0.5):
             g.bi_edge_edit((x,y), (x-1, y - 1), diag_cost)
 
     for y in range(1, rows):
-        g.bi_edge_edit((0,y), (1,y-1), diag_cost)
+        for x in range(0, columns - 1):
+            g.bi_edge_edit((x,y), (x + 1,y-1), diag_cost)
 
-    for x in range(1, columns):
-        g.bi_edge_edit((x,0), (x-1,1), diag_cost)
+    # for x in range(1, columns):
+    #     g.bi_edge_edit((x,0), (x-1,1), diag_cost)
 
     # for y in range(rows):
     #     for x in range(columns):
