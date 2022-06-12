@@ -69,6 +69,7 @@ def a_star_setup(graph, start, target):
     for node in graph.map_to_row:
         cartesian_distance = ((node[0] - target[0])**2 + (node[1] - target[1])**2)**0.5
         h[node] = cartesian_distance
+        # h[node] = 0 # For Dijkstras
 
     return open_set, closed_set, h, g
 
@@ -107,7 +108,7 @@ def mark_neighbour(graph, open_set, closed_set, h, g, adapter, pos, neighbour_po
                 open_set.insert(neighbour_cost, (neighbour_pos, pos))
         else:
             open_set.insert(neighbour_cost, (neighbour_pos, pos))
-            g[neighbour_pos] = current_g + graph.edge(pos, neighbour_pos)
+            g[neighbour_pos] = neighbour_g
 
         adapter.change_status(neighbour_pos, "accessible")
 
