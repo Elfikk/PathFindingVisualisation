@@ -25,6 +25,8 @@ class Intermediate():
         self.columns = columns 
         self.grid_x_min = x_min
         self.grid_y_min = y_min
+        # self.grid_gen_method = grid_gen_method
+        # self.graph_gen_method = graph_gen_method
         
     def change_status(self, node_id, code_word):
         #Used for changing the Tile colour in simple cases - can be used in 
@@ -62,6 +64,11 @@ class Intermediate():
         #Hash-like function. Maps position from grid to a legitimate ID.
         return ((pos[0] - self.grid_x_min)//self.grid_interval, \
                 (pos[1] - self.grid_y_min)//self.grid_interval)
+
+    def update_grid(self, columns, rows, start_x, start_y, target_x, target_y):
+        if columns != self.columns or rows != self.rows:
+            #Regenerate grid from scratch.
+            self.graph
 
 
 def cartesian_distance(x0, y0, x1, y1):

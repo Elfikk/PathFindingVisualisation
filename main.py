@@ -18,7 +18,7 @@ grid_rectangle = pygame.Rect(140, 110, 1000, 500)
 background_colour = (0,0,0)
 grid_colour = (255,255,255)
 
-rows, columns = 25, 25
+rows, columns = 15, 15
 x_min, y_min = 140, 110
 interval = 20
 
@@ -38,8 +38,7 @@ def window_update(screen, clock, background_colour, grid_colour, columns, \
     #To save on rewriting all the pygame window drawing.
 
     screen.fill(background_colour)
-    draw_grid(screen, grid_colour, columns, rows, x_min, y_min, \
-                interval)
+    draw_grid(screen, grid_colour, columns, rows, x_min, y_min, interval)
     all_tiles.draw(screen)
 
     pygame.display.flip()
@@ -81,7 +80,7 @@ while not done:
         #Spacebar - start algo
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
-            open_set, closed_set, h, g = a_star_setup(graph, start, target)
+            open_set, closed_set, h, g = a_star_setup(adapter.graph, start, target)
 
             neighbours = []
 
@@ -94,13 +93,13 @@ while not done:
                 pygame.event.pump() 
 
                 open_set, closed_set, h, g, neighbours, pos, previous_pos =\
-                    visit_next_node(graph, target, open_set, closed_set, h, g,\
+                    visit_next_node(adapter.graph, target, open_set, closed_set, h, g,\
                                     adapter)
 
                 if neighbours != None:
 
                     for neighbour_pos in neighbours:
-                        mark_neighbour(graph, open_set, closed_set, h, g, \
+                        mark_neighbour(adapter.graph, open_set, closed_set, h, g, \
                                        adapter, pos, neighbour_pos)
                                 
                         screen.fill(background_colour)

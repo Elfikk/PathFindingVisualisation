@@ -46,32 +46,32 @@ class MainMenu(QDialog):
         self.entry_group = QGroupBox()
         entries_layout = QVBoxLayout()
 
-        columns = QLineEdit("50")
+        self.columns_input = QLineEdit("50")
         by_label = QLabel("x")
-        rows = QLineEdit("50")
+        self.rows_input = QLineEdit("50")
 
         grid_size_layout = QHBoxLayout()
-        grid_size_layout.addWidget(columns)
+        grid_size_layout.addWidget(self.columns_input)
         grid_size_layout.addWidget(by_label)
-        grid_size_layout.addWidget(rows)
+        grid_size_layout.addWidget(self.rows_input)
 
-        start_x_entry = QLineEdit("0")
+        self.start_x_entry = QLineEdit("0")
         start_comma_label = QLabel(",")
-        start_y_entry = QLineEdit("0")
+        self.start_y_entry = QLineEdit("0")
 
         start_layout = QHBoxLayout()
-        start_layout.addWidget(start_x_entry)
+        start_layout.addWidget(self.start_x_entry)
         start_layout.addWidget(start_comma_label)
-        start_layout.addWidget(start_y_entry)
+        start_layout.addWidget(self.start_y_entry)
 
-        target_x_entry = QLineEdit("50")
+        self.target_x_entry = QLineEdit("50")
         target_comma_label = QLabel(",")
-        target_y_entry = QLineEdit("50")
+        self.target_y_entry = QLineEdit("50")
 
         target_layout = QHBoxLayout()
-        target_layout.addWidget(target_x_entry)
+        target_layout.addWidget(self.target_x_entry)
         target_layout.addWidget(target_comma_label)
-        target_layout.addWidget(target_y_entry)
+        target_layout.addWidget(self.target_y_entry)
 
         entries_layout.addStretch(1)
         entries_layout.addLayout(grid_size_layout)
@@ -91,7 +91,6 @@ class MainMenu(QDialog):
 
         headings_layout = QGridLayout()
         headings_layout.addWidget(x_column_label, 0, 0)
-        # headings_layout.addStretch(1)
         headings_layout.addWidget(y_column_label, 0, 2)
 
         self.headings_group.setLayout(headings_layout)
@@ -120,7 +119,13 @@ class MainMenu(QDialog):
 
     @pyqtSlot()
     def on_update(self):
-        self.update_method()
+        rows = int(self.rows_input.text())
+        columns = int(self.columns_input.text())        
+        start_x = int(self.start_x_entry.text())
+        start_y = int(self.start_y_entry.text())
+        target_x = int(self.target_x_entry.text())
+        target_y = int(self.target_y_entry.text())
+        self.update_method(columns, rows, start_x, start_y, target_x, target_y)
 
     @pyqtSlot()
     def on_start(self):
