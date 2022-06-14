@@ -117,6 +117,18 @@ class MainMenu(QDialog):
 
         self.button_group.setLayout(buttons_layout)
 
+    def update_grid_size(self, columns, rows):
+        self.columns_input.setText(str(columns))
+        self.rows_input.setText(str(rows))
+
+    def update_start(self, start):
+        self.start_x_entry.setText(str(start[0]))
+        self.start_y_entry.setText(str(start[1]))
+
+    def update_target(self, target):
+        self.target_x_entry.setText(str(target[0]))
+        self.target_y_entry.setText(str(target[1]))
+
     @pyqtSlot()
     def on_update(self):
         rows = int(self.rows_input.text())
@@ -129,7 +141,13 @@ class MainMenu(QDialog):
 
     @pyqtSlot()
     def on_start(self):
-        self.start_method()
+        rows = int(self.rows_input.text())
+        columns = int(self.columns_input.text())        
+        start_x = int(self.start_x_entry.text())
+        start_y = int(self.start_y_entry.text())
+        target_x = int(self.target_x_entry.text())
+        target_y = int(self.target_y_entry.text())
+        self.start_method(columns, rows, start_x, start_y, target_x, target_y)
 
     @pyqtSlot()
     def on_reset(self):
